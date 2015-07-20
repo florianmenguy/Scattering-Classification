@@ -1,8 +1,8 @@
-function [mean_accuracy, confusion_matrix,cor] = rwc_evaluate(predicted_label, true_labels,dureeTotal,testLabelTot)
+function [mean_accuracy, confusion_matrix,matrixDeci] = rwc_evaluate(predicted_label, true_labels,dureeTotal,testLabelTot)
 
 
 position=0;
- cor=[];
+ matrixDeci=[];
 % 
 comp=[];
 for i=1:length(dureeTotal)
@@ -12,11 +12,11 @@ for i=1:length(dureeTotal)
         
         
     end
-    cor(i)=mode(comp,2);
+    matrixDeci(i)=mode(comp,2);
     comp=[ ];
      position=sum(testLabelTot(1:i));
 end
- mean_accuracy=(mean(grp2idx(cor)==grp2idx(testLabelTot)))*100;%Mesure de l'erreur moyenne sur la sortie du classifieur
+ mean_accuracy=(mean(grp2idx(matrixDeci)==grp2idx(testLabelTot)))*100;%Mesure de l'erreur moyenne sur la sortie du classifieur
 %                                                 %par rapport à l'ensemble
 %                                                 %de test de départ
-   [confusion_matrix,order] = confusionmat(cor,testLabelTot); 
+   [confusion_matrix,order] = confusionmat(matrixDeci,testLabelTot); 
