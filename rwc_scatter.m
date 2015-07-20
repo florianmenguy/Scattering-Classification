@@ -1,59 +1,64 @@
 function instrument_features = rwc_scatter( opts,datapath )
-%Fonction réalisant l'extraction des coefficients de scattering au sein
-%d'un tableau de cellule (instrument_features).Après standardisation des
-%données. Les lignes du tableau correspondent aux classes des
-%instruments(ligne1: Ba ligne2: Bo ....).
+% Fonction realisant l'extraction des coefficients de scattering au sein
+% d'un tableau de cellules (instrument_features). Les coefficients sont
+% "standardis�s" (moyenne 0, variance 1) sur toute la base RWC.
+% instrument_features{i}{z} est une matrice temps-features contenant la
+% transform�e de scattering du fichier z pour l'instrument i.
 
-
-
-%Création architecture
+% Creation de l'architecture
 archs = sc_setup(opts);
-display_bank(archs{1}.banks{1});
-%display_bank(archs{2}.banks{1});
 
-% Chargement du signal
-instrument={'Ba' 'Bo'  'Cl' 'Co' 'Fh' 'Fl' 'Ob' 'Pn' 'Sa' 'Ta' 'Tb' 'Tr' 'Va' 'Vl'};
-for i=1:length(instrument)
-    files = dir([datapath instrument{i} '/*WAV']);
-    nomFichier = [instrument{1,i}];
-    S_matrixTotaleTrain=[];
-    S_matrixTotaleTest=[];
-    finalvote=[];
-    S_matrix=cell(1,length(files));%Crétion tableau de cellule
-    for z=1:length(files)
-        eval(['number_files' nomFichier '=ones(1,length(files))*i;']);
-        %% Audioread
-        
-        filename=[datapath instrument{i} '/' files(z,1).name];
-        [y,fs]=audioread(filename);
-        time=length(y)/fs;
-        
-        if time > 3 %On coupe les sons supérieurs à 3s
+% Liste des instruments
+instruments = ...
+    {'Ba' 'Bo'  'Cl' 'Co' 'Fh' 'Fl' 'Ob' 'Pn' 'Sa' 'Ta' 'Tb' 'Tr' 'Va' 'Vl'};
+nInstruments = length(instruments);
+instrument_features = cell(nInstruments,1);
+concatenated_features = cell(nInstruments,1);
+
+for i = 1:nInstruments
+    % On ne garde que les noms de fichiers se terminant par WAV
+    files = dir([datapath instruments{i} '/*WAV']);
+    nFiles = length(files);
+    instrument_features{i} = cell(nFiles,1);
+    
+    for z = 1:nFiles
+        % Chargement du signal
+        filename = [datapath instruments{i} '/' files(z,1).name];
+        [y,fs] = audioread(filename);
+        time = length(y)/fs;
+        if time > 3 % on coupe les sons plus longs que 3 s
             y=y(1:3*fs);
         end
         
         % Normalisation du signal
-        ymean=y-mean(y);
-        maxabs=max(abs(ymean));
-        y=ymean/maxabs;
-        %
+        ymean = y - mean(y);
+        maxabs = max(abs(ymean));
+        y = ymean/maxabs;
         
-        %% Recuperation de S U et Y
-        %archs{1}.nonlinearity.denominator = 1e-2;
-        [S,U,Y] = sc_propagate(y,archs);
-        % Formatage à la main
-        S1_matrix = S{1+1}.data.';
-        %S2_matrix = [S{1+2}.data{:}].';
-        S_matrix{z} =(S1_matrix);% S2_matrix];
-    
-        %imagesc(S_matrix{z}); % en vertical pas de signification particulière
-        S_matrixMean=mean(S_matrix{z},2);
-        S_matrixVar=var(S_matrix{z},[],2);
-        S_matrixCenter=bsxfun(@minus,S_matrix{z},S_matrixMean);
-        S_matrixStd=bsxfun(@rdivide,S_matrixCenter,S_matrixVar);
-       instrument_features{i,z}=S_matrixStd;
+        % Scattering
+        S = sc_propagate(y,archs);
+        instrument_features{i}{z} = sc_format(S);
     end
+    % On concat�ne ensemble tous les fichiers de chaque instrument
+    concatenated_features{i} = [instrument_features{i}{:}];
 end
 
+% On concat�ne tout
+full_matrix = [concatenated_features{:}];
+
+% Calcul de la moyenne et de la variance globale de chaque feature
+full_mean = mean(full_matrix,2);
+full_variance = var(full_matrix,2);
+
+% Standardisation
+for i = 1:nInstruments
+    for z = 1:nFiles
+        instrument_features{i}{z} = ...
+            bsxfun(@minus,instrument_features{i}{z}, full_mean);
+        instrument_features{i}{z} = ...
+            bsxfun(@rdivide, instrument_features{i}{z}, full_variance);
+    end
+end
+end
 
 
