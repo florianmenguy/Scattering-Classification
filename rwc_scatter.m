@@ -1,9 +1,9 @@
 function instrument_features = rwc_scatter( opts,datapath )
 % Fonction realisant l'extraction des coefficients de scattering au sein
 % d'un tableau de cellules (instrument_features). Les coefficients sont
-% "standardisés" (moyenne 0, variance 1) sur toute la base RWC.
+% "standardisÃ©s" (moyenne 0, variance 1) sur toute la base RWC.
 % instrument_features{i}{z} est une matrice temps-features contenant la
-% transformée de scattering du fichier z pour l'instrument i.
+% transformÃ©e de scattering du fichier z pour l'instrument i.
 
 % Creation de l'architecture
 archs = sc_setup(opts);
@@ -39,11 +39,11 @@ for i = 1:nInstruments
         S = sc_propagate(y,archs);
         instrument_features{i}{z} = sc_format(S);
     end
-    % On concatène ensemble tous les fichiers de chaque instrument
+    % On concatÃ¨ne ensemble tous les fichiers de chaque instrument
     concatenated_features{i} = [instrument_features{i}{:}];
 end
 
-% On concatène tout
+% On concatÃ¨ne tout
 full_matrix = [concatenated_features{:}];
 
 % Calcul de la moyenne et de la variance globale de chaque feature
@@ -52,6 +52,7 @@ full_variance = var(full_matrix,2);
 
 % Standardisation
 for i = 1:nInstruments
+    nFiles=length(instrument_features{i});
     for z = 1:nFiles
         instrument_features{i}{z} = ...
             bsxfun(@minus,instrument_features{i}{z}, full_mean);
