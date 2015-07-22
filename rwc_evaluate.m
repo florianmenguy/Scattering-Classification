@@ -14,7 +14,7 @@ for i=1:length(dureeTotal)
     end
     matrixDeci(i)=mode(comp,2);
     comp=[ ];
-     position=sum(testLabelTot(1:i));
+     position=sum(dureeTotal(1:i));
 end
  mean_accuracy=(mean(grp2idx(matrixDeci)==grp2idx(testLabelTot)))*100;%Mesure de l'erreur moyenne sur la sortie du classifieur
 %                                                 %par rapport à l'ensemble
