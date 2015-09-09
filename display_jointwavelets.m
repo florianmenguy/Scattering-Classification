@@ -14,5 +14,8 @@ U{1+0}.data = signal;
 
 % on calcule le scalogramme U1
 Y{1} = U_to_Y(U{1+0}, archs{1});
+U{1+1} = Y_to_U(Y{1}{end}, archs{1});
+
+%
 
 end
