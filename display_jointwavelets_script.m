@@ -1,5 +1,8 @@
 % TODO définir architecture jointe ici
 
+opts{2}.gamma.T = 32;
+opts{2}.gamma.U_log2_oversampling = Inf;
+
 %%
 U2 = jointwavelets(archs);
 
