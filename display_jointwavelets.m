@@ -1,2 +1,3 @@
-function display_jointwavelets(archs, j2, beta)
+function display_jointwavelets(archs)
+
 end
