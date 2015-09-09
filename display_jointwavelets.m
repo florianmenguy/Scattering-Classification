@@ -13,5 +13,6 @@ U{1+0} = initialize_variables_auto(size(target_signal));
 U{1+0}.data = signal;
 
 % on calcule le scalogramme U1
+Y{1} = U_to_Y(U{1+0}, archs{1});
 
 end
