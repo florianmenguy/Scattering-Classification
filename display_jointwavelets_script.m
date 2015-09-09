@@ -25,13 +25,17 @@ beta = 5;
 
 figure(1);
 Y2_wavelets = jointwavelets(archs);
-strf = real(Y2_wavelets{end}{1}.data{j2}{beta});
+wavelet_strf = real(Y2_wavelets{end}{1}.data{j2}{beta});
 scaling = 64/max(strf(:));
-strf_asc = scaling * strf(:,:,1).';
-strf_desc = scaling * strf(:,:,2).';
+wavelet_strf_asc = scaling * strf(:,:,1).';
+wavelet_strf_desc = scaling * strf(:,:,2).';
 
 subplot(211);
-imagesc(strf_asc);
+imagesc(wavelet_strf_asc);
 subplot(212);
-imagesc(strf_desc);
+imagesc(wavelet_strf_desc);
 colormap rev_hot;
+
+%% Scatter cello
+full_cello_signal = audioread('Vc-scale-chr-asc.wav');
+cello_signal = full_cello_signal(1:65536);
