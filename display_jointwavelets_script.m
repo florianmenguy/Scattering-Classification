@@ -7,20 +7,15 @@ opts{1}.time.max_scale = 4096; % environ 93 ms
 opts{1}.time.max_Q=8;
 opts{1}.time.size=N;
 
-max_firstorder_context = 32; % in ms
-firstorder_scales = [archs{1}.banks{1}.metas.scale] / fs * 1000;
-[~, max_gamma] = find(firstorder_scales>max_firstorder_context,1);
-opts{1}.time.gamma_bounds = [1 max_gamma];
-
 % Non-linéarité
 opts{1}.nonlinearity.name = 'modulus';
 
 % Second ordre
 opts{2}.time = struct();
-transpinv_octaves = 0.5; % transposition invariance in octaves
+transpinv_octaves = 4; % transposition invariance in octaves
 nChromas = opts{1}.time.max_Q;
 transpinv_chromas = round(transpinv_octaves * nChromas);
-opts{2}.gamma.T = 32;
+opts{2}.gamma.T = transpinv_chromas;
 opts{2}.gamma.U_log2_oversampling = Inf;
 
 archs = sc_setup(opts);
