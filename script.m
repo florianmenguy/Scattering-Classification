@@ -24,7 +24,7 @@ opts{1}.nonlinearity.denominator = 1e-2;
 %
 
 opts{2}.time = struct();
-transpinv_octaves = (0.5:0.1:4) ; % transposition invariance in octaves
+transpinv_octaves = 4 ; % transposition invariance in octaves
 nChromas = opts{1}.time.max_Q;
 transpinv_chromas = round(transpinv_octaves * nChromas);
 
