@@ -1,22 +1,21 @@
 % Bank setup
 fs=44100;
 % Valeurs
-T=2048; % Quantité d'invariance 46 ms
-N = 4*T;% Chunk de taille 740ms
+T = 2048; % Quantite d'invariance 46 ms
 
 % Ordre 1 en temps
 opts{1}.time.T = 2048;
-opts{1}.time.max_scale = 4096;%Environ 93 ms
+opts{1}.time.max_scale = 4096; % Environ 93 ms
 opts{1}.time.max_Q=8;
-opts{1}.time.size=N;
 
-
-% Non-linéarité entre les deux ordres
-opts{1}.nonlinearity.name = 'modulus'; % par défaut
+% Non-linearite entre les deux ordres
 opts{1}.nonlinearity.name = 'uniform_log';
 opts{1}.nonlinearity.denominator = 1e-2;
 
+% Ordre 2 en temps
 opts{2}.time.handle = @morlet_1d;
+
+% Ordre 2 en 
 transpinv_octaves = 4 ; % transposition invariance in octaves
 nChromas = opts{1}.time.max_Q;
 transpinv_chromas = round(transpinv_octaves * nChromas);
