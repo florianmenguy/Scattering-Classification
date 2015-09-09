@@ -26,9 +26,9 @@ beta = 5;
 figure(1);
 Y2_wavelets = jointwavelets(archs);
 wavelet_strf = real(Y2_wavelets{end}{1}.data{j2}{beta});
-scaling = 64/max(strf(:));
-wavelet_strf_asc = scaling * strf(:,:,1).';
-wavelet_strf_desc = scaling * strf(:,:,2).';
+scaling = 64 / max(wavelet_strf(:));
+wavelet_strf_asc = scaling * wavelet_strf(:,:,1).';
+wavelet_strf_desc = scaling * wavelet_strf(:,:,2).';
 
 subplot(211);
 imagesc(wavelet_strf_asc);
@@ -41,3 +41,6 @@ full_cello_signal = audioread('Vc-scale-chr-asc.wav');
 cello_signal = full_cello_signal(1:65536);
 [cello_S,cello_U,cello_Y] = sc_propagate(cello_signal,archs);
 cello_U = sc_unchunk(cello_U);
+
+cello_strf = cello_U{1+2}{1}.data{j2}{beta};
+scaling = 64 / max(wavelet_strf(:));
