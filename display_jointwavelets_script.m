@@ -20,16 +20,16 @@ opts{2}.gamma.U_log2_oversampling = Inf;
 
 archs = sc_setup(opts);
 %% Display wavelets
-j2 = 5;
-beta = 5;
+j2 = 6;
+beta = 4;
 
-figure(1);
 Y2_wavelets = jointwavelets(archs);
 wavelet_strf = real(Y2_wavelets{end}{1}.data{j2}{beta});
-scaling = 64 / max(wavelet_strf(:));
-wavelet_strf_asc = scaling * wavelet_strf(:,:,1).';
-wavelet_strf_desc = scaling * wavelet_strf(:,:,2).';
+wavelet_scaling = 64 / max(wavelet_strf(:));
+wavelet_strf_asc = wavelet_scaling * wavelet_strf(:,:,1).';
+wavelet_strf_desc = wavelet_scaling * wavelet_strf(:,:,2).';
 
+figure(2);
 subplot(211);
 imagesc(wavelet_strf_asc);
 subplot(212);
@@ -42,5 +42,15 @@ cello_signal = full_cello_signal(1:65536);
 [cello_S,cello_U,cello_Y] = sc_propagate(cello_signal,archs);
 cello_U = sc_unchunk(cello_U);
 
+%% Display cello
 cello_strf = cello_U{1+2}{1}.data{j2}{beta};
-scaling = 64 / max(wavelet_strf(:));
+cello_scaling = 64 / max(cello_strf(:));
+cello_strf_asc = cello_scaling * cello_strf(:,:,1).';
+cello_strf_desc = cello_scaling * cello_strf(:,:,2).';
+
+figure(2);
+subplot(211);
+imagesc(cello_strf_asc);
+subplot(212);
+imagesc(cello_strf_desc);
+colormap rev_hot;
