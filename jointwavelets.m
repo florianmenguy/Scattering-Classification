@@ -21,5 +21,5 @@ U{1+1}.data{round(end/2)}(end/2) = 1;
 
 % scattering joint (ondelette horizontale puis ondelette verticale)
 Y{2} = U_to_Y(U{1+1}, archs{1});
-U{1+2} = Y_to_U(Y{2}{end}, archs{1});
+U2 = Y_to_U(Y{2}{end}, archs{1});
 end
