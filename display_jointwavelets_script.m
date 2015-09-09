@@ -39,3 +39,5 @@ colormap rev_hot;
 %% Scatter cello
 full_cello_signal = audioread('Vc-scale-chr-asc.wav');
 cello_signal = full_cello_signal(1:65536);
+[cello_S,cello_U,cello_Y] = sc_propagate(cello_signal,archs);
+cello_U = sc_unchunk(cello_U);
