@@ -9,7 +9,7 @@ S = cell(1,1+nLayers);
 U = cell(1,1+nLayers);
 Y = cell(1,1+nLayers);
 
-U{1+0} = initialize_variables_auto(size(target_signal));
+U{1+0} = initialize_variables_auto(size(signal));
 U{1+0}.data = signal;
 
 % on calcule le scalogramme U1
