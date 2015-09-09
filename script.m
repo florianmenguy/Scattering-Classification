@@ -21,9 +21,7 @@ opts{1}.nonlinearity.name = 'modulus'; % par défaut
 opts{1}.nonlinearity.name = 'uniform_log';
 opts{1}.nonlinearity.denominator = 1e-2;
 
-%
-
-opts{2}.time = struct();
+opts{2}.time.handle = @morlet_1d;
 transpinv_octaves = 4 ; % transposition invariance in octaves
 nChromas = opts{1}.time.max_Q;
 transpinv_chromas = round(transpinv_octaves * nChromas);
