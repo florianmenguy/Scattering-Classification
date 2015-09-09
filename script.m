@@ -28,20 +28,20 @@ opts{1}.nonlinearity.denominator = 1e-2;
 
 %
 
-% opts{2}.time = struct();
-% transpinv_octaves = 0.5; % transposition invariance in octaves
-% nChromas = opts{1}.time.max_Q;
-% transpinv_chromas = round(transpinv_octaves * nChromas);
-% 
-% opts{2}.gamma.is_U_blurred = false;
-% opts{2}.gamma.T = transpinv_chromas;
-% 
-% % % Création architecture
-%archs = sc_setup(opts);
-% % % display_bank(archs{1}.banks{1});
-% % % display_bank(archs{2}.banks{1});
+opts{2}.time = struct();
+transpinv_octaves = 0.5; % transposition invariance in octaves
+nChromas = opts{1}.time.max_Q;
+transpinv_chromas = round(transpinv_octaves * nChromas);
 
- datapath='~/Documents/MATLAB/Stage/rwc/';
+opts{2}.gamma.is_U_blurred = false;
+opts{2}.gamma.T = transpinv_chromas;
+
+% % Création architecture
+archs = sc_setup(opts);
+% % display_bank(archs{1}.banks{1});
+% % display_bank(archs{2}.banks{1});
+
+datapath='~/Documents/MATLAB/Stage/rwc/';
  instrument_features = rwc_scatter( datapath,opts);
 
 [predicted_label, true_labels,dureeTotal,testLabelTot,accuracy] = rwc_classify(instrument_features);
