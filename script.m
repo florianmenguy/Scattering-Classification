@@ -1,8 +1,3 @@
-clear all;
-close all;
-clc;
-rng(0)
-
 % Bank setup
 fs=44100;
 % Valeurs
