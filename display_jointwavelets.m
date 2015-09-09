@@ -16,6 +16,7 @@ U{1+0}.data = signal;
 Y{1} = U_to_Y(U{1+0}, archs{1});
 U{1+1} = Y_to_U(Y{1}{end}, archs{1});
 
-%
+% on met un Dirac au "milieu" en temps-fréquence du scalogramme
+U{1+1}.data{round(end/2)}(end/2) = 1;
 
 end
