@@ -1,4 +1,4 @@
-function display_jointwavelets(archs)
+function U2 = display_jointwavelets(archs)
 % Initialisation avec du silence
 N = archs{1}.banks{1}.spec.size;
 signal = zeros(N,1);
@@ -22,6 +22,4 @@ U{1+1}.data{round(end/2)}(end/2) = 1;
 % scattering joint (ondelette horizontale puis ondelette verticale)
 Y{2} = U_to_Y(U{1+1}, archs{1});
 U{1+2} = Y_to_U(Y{2}{end}, archs{1});
-
-
 end
