@@ -4,14 +4,14 @@
 U2 = jointwavelets(archs);
 
 %%
-j2 = 7;
+j2 = 5;
 beta = 1;
-scaling = 64/max(U2{1}.data{j2}{beta}(:));
+scaling = 64/max(U2{1}.data{7}{beta}(:));
 strf_asc = scaling * U2{1}.data{j2}{beta}(:,:,1).';
 strf_desc = scaling * U2{1}.data{j2}{beta}(:,:,2).';
 
 subplot(211);
-image(strf_asc);
+imagesc(strf_asc);
 subplot(212);
-image(strf_desc);
+imagesc(strf_desc);
 colormap rev_hot;
