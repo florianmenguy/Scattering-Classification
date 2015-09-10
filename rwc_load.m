@@ -1,4 +1,4 @@
-function features = load_features(featurespath)
+function features = rwc_load(featurespath)
 nBatches = 45;
 batch_features = cell(nBatches, 1);
 for batch_id = 1:nBatches
