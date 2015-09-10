@@ -1,4 +1,4 @@
-function generate_filelinks()
+function rwc_filelinks()
 fileID = fopen('filelinks.html','w');
 
 for n = 1:45
