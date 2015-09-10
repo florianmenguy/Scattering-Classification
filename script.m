@@ -1,3 +1,4 @@
+
 % Ordre 1 en temps
 opts{1}.time.T = 2048;
 opts{1}.time.size = 4 * opts{1}.time.T;
@@ -11,7 +12,7 @@ opts{1}.nonlinearity.denominator = 1e-2;
 % Ordre 2 en temps (dimension horizontale)
 opts{2}.time.handle = @morlet_1d;
 
-% Ordre 2 en log-fr�quence (dimension verticale)
+% Ordre 2 en log-frï¿½quence (dimension verticale)
 transpinv_octaves = 4 ; % invariance maximale par transposition = 4 octaves
 nChromas = opts{1}.time.max_Q;
 transpinv_chromas = round(transpinv_octaves * nChromas);
@@ -33,7 +34,7 @@ metas = rwc_parse(datapath);
 %end
 
 %% Load features
-featurespath = '~/rwc_jointfeatures';
+featurespath = '~/Documents/MATLAB/rwc_jointfeatures';
 samples = rwc_load(featurespath);
 
 %% Apply logarithmic transformation to the features
@@ -48,15 +49,5 @@ feature_matrix = [samples.data];
 %% Standardize features to null mean and unit variance
 feature_matrix = bsxfun(@minus, feature_matrix, mean(feature_matrix,2));
 feature_matrix = bsxfun(@rdivide, feature_matrix, std(feature_matrix,[],2));
-
-%% Set up partition (x are features, y are labels)
-labels = [samples.instrument_id];
-nSamples = length(samples);
-test_ratio = 0.1;
-nFolds = 1;
-
-[train_bools, test_bools] = crossvalind('HoldOut', nSamples, test_ratio);
-train_x = feature_matrix(:, train_bools);
-train_y = labels(train_bools);
-test_x = feature_matrix(:, test_bools);
-test_y = labels(test_bools);
+%
+[temp,feature_matrix,ai,as,temporaire,w,train,test,predicted_label,A1, V, accuracy]= rwc_classify(feature_matrix,samples);
