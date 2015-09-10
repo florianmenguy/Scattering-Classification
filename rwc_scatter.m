@@ -1,9 +1,11 @@
 function batch = rwc_scatter(archs, datapath, batch)
 
 nFiles = length(batch);
+batch_id = batch(1).batch_id;
 
 % Measure elapsed time with tic() and toc()
 tic();
+disp('Number of files in batch ', num2str(batch_id), ' : ', num2str(nFiles));
 parfor file_index = 1:nFiles
     meta = batch(file_index);
     % Chargement du signal
@@ -39,7 +41,6 @@ host = char(host); % convert to MATLAB char array
 date = datestr(now());
 
 % Save
-batch_id = batch(1).batch_id;
 savefile_name = ['jointrwc_', num2str(batch_id,'%1.2d')];
 if ~exist('features','dir')
     mkdir('features');
