@@ -11,7 +11,7 @@ opts{1}.nonlinearity.denominator = 1e-2;
 % Ordre 2 en temps (dimension horizontale)
 opts{2}.time.handle = @morlet_1d;
 
-% Ordre 2 en log-fréquence (dimension verticale)
+% Ordre 2 en log-frï¿½quence (dimension verticale)
 transpinv_octaves = 4 ; % invariance maximale par transposition = 4 octaves
 nChromas = opts{1}.time.max_Q;
 transpinv_chromas = round(transpinv_octaves * nChromas);
@@ -23,18 +23,18 @@ datapath='~/datasets/rwc/';
 archs = sc_setup(opts);
 
 %%
-metas = parse_rwc(datapath);
+metas = rwc_parse(datapath);
 
 %% This for loop is handled on the server
-
-nBatches = max([metas.batch_id]);
-for batch_id = 1:nBatches
-      batch = metas([metas.batch_id]==batch_id);
-      rwc_scatter(archs, datapath, batch);
-end
+%nBatches = max([metas.batch_id]);
+%for batch_id = 1:nBatches
+%      batch = metas([metas.batch_id]==batch_id);
+%      rwc_scatter(archs, datapath, batch);
+%end
 
 %% Load features
 featurepath = '~/rwc_jointfeatures';
-features = load_features(featurespath);
+features = rwc_load(featurespath);
 
 %%
+data = [features.data];
