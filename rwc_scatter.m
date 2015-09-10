@@ -36,6 +36,7 @@ host = char(host); % convert to MATLAB char array
 date = datestr(now());
 
 % Save
+batch_id = batch(1).batch_id;
 savefile_name = ['jointrwc_', num2str(batch_id,'%1.2d')];
 if ~exist('features','dir')
     mkdir('features');
