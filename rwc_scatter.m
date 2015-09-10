@@ -6,6 +6,7 @@ batch_id = batch(1).batch_id;
 % Measure elapsed time with tic() and toc()
 tic();
 disp(['Number of files in batch ', num2str(batch_id), ' : ', num2str(nFiles)]);
+batch(1).data = [];
 parfor file_index = 1:nFiles
     meta = batch(file_index);
     % Chargement du signal
@@ -43,12 +44,13 @@ host = char(host); % convert to MATLAB char array
 date = datestr(now());
 
 % Save
-savefile_name = ['jointrwc_', num2str(batch_id,'%1.2d')];
+batch_id_str = num2str(batch_id,'%1.2d');
+savefile_name = ['jointrwc_', batch_id_str];
 if ~exist('features','dir')
     mkdir('features');
 end
 savefile_path = ['features/', savefile_name];
-save(savefile_path, 'batch', 'setting', 'host', 'elapsed', 'date');
+save(savefile_path, 'batch', 'host', 'elapsed', 'date');
 
 % Print termination message
 disp('--------------------------------------------------------------------------------');
