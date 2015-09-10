@@ -1,4 +1,4 @@
-function batch = rwc_scatter(archs, batch, datapath)
+function batch = rwc_scatter(archs, datapath, batch)
 
 nFiles = length(batch);
 
