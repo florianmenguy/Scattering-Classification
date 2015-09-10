@@ -43,6 +43,8 @@ samples = rwc_log(samples, 1e-6);
 samples = rwc_summarize(samples);
 
 %% Transform data into a matrix
-tic();feature_matrix = [samples.data];toc();
+feature_matrix = [samples.data];
 
 %% Standardize features to null mean and unit variance
+feature_matrix = bsxfun(@minus, feature_matrix, mean(feature_matrix,2));
+feature_matrix = bsxfun(@rdivide, feature_matrix, std(feature_matrix,[],2));
