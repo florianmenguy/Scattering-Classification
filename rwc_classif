@@ -1,0 +1,36 @@
+function [temp,feature_matrix,ai,as,temporaire,w,train,test,predicted_label,A1, V, accuracy] = rwc_classif(feature_matrix,samples)
+
+
+temp=ones(1,length(samples));
+temporaire=feature_matrix;
+for w=1:length(samples)
+    temp(1,w)=samples(1,w).instrument_id;
+end
+[ai,as]=sort(temp(1,:));
+[l,~]=size(feature_matrix);
+for z=1:l
+    o=temporaire(z,:);
+    o=o(as);
+    temporaire(z,:)=o;
+end
+w=num2cell(temporaire,1);
+temp=temp(as);
+[train,test] = crossvalind('HoldOut',temp, 0.5);
+
+    %%Train
+  trainSamples=w(train);
+   trainLabel=temp(train);
+
+
+    %%Test
+    
+     testSamples=w(test);
+     testLabel=temp(test);
+     true_labels=testLabel;
+  
+trainSamples=cell2mat(trainSamples);
+testSamples=cell2mat(testSamples);
+model= svmtrain(trainLabel', trainSamples' ,'-s 0  -t 2 -c 1 -g 8');
+[predicted_label, accuracy,~] = svmpredict(testLabel', testSamples', model);
+[A1, V]  = confusionmat(true_labels', predicted_label);
+end
