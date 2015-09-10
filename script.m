@@ -42,6 +42,7 @@ samples = rwc_log(samples, 1e-6);
 %% Summarize features
 samples = rwc_summarize(samples);
 
-%%
-
+%% Transform data into a matrix
 tic();feature_matrix = [samples.data];toc();
+
+%% Standardize features to null mean and unit variance
