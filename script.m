@@ -48,3 +48,9 @@ feature_matrix = [samples.data];
 %% Standardize features to null mean and unit variance
 feature_matrix = bsxfun(@minus, feature_matrix, mean(feature_matrix,2));
 feature_matrix = bsxfun(@rdivide, feature_matrix, std(feature_matrix,[],2));
+
+%% Set up partition
+labels = [samples.instrument_id];
+nSamples = length(samples);
+test_ratio = 0.1;
+[train_bools, test_bools] = crossvalind('HoldOut', nSamples, test_ratio);
