@@ -50,4 +50,4 @@ feature_matrix = [samples.data];
 feature_matrix = bsxfun(@minus, feature_matrix, mean(feature_matrix,2));
 feature_matrix = bsxfun(@rdivide, feature_matrix, std(feature_matrix,[],2));
 %
-[temp,feature_matrix,ai,as,temporaire,w,train,test,predicted_label,A1, V, accuracy]= rwc_classify(feature_matrix,samples);
+[temp,feature_matrix,ai,as,temporaire,w,train,test,predicted_label,A1, V, accuracy]= rwc_classif(feature_matrix,samples);
