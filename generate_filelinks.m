@@ -1,8 +1,5 @@
 function generate_filelinks()
-nFiles = 45;
-for file_index = 1:nFiles
-    nbstr = num2str(file_index, '%1.2d');
-    filestring = ['<a href="jointrwc_',nbstr, '.mat" >', nbstr, '</a>'];
-    disp(filestring);
-end
+fileID = fopen('filelinks.html','w');
+fprintf(fileID, '<a href="jointrwc_%1.2d.mat">%1.2d</a>\n', 1:45, 1:45)
+fclose(fileID);
 end
