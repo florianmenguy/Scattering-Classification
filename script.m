@@ -1,35 +1,50 @@
-clear all;
-close all;
-clc;
-rng(0)
-
-% Bank setup
-fs=44100;
-% Valeurs
-T=2048; % Quantité d'invariance 46 ms
-N = 4*T;% Chunk de taille 740ms
-
 % Ordre 1 en temps
 opts{1}.time.T = 2048;
-opts{1}.time.max_scale = 4096;%Environ 93 ms
+opts{1}.time.size = 4 * opts{1}.time.T;
+opts{1}.time.max_scale = 4096; % Environ 93 ms
 opts{1}.time.max_Q=8;
-opts{1}.time.size=N;
 
-
-% Non-linéarité entre les deux ordres
-opts{1}.nonlinearity.name = 'modulus'; % par défaut
+% Non-linearite entre les deux ordres
 opts{1}.nonlinearity.name = 'uniform_log';
 opts{1}.nonlinearity.denominator = 1e-2;
 
+% Ordre 2 en temps (dimension horizontale)
 opts{2}.time.handle = @morlet_1d;
-transpinv_octaves = 4 ; % transposition invariance in octaves
+
+% Ordre 2 en log-fr�quence (dimension verticale)
+transpinv_octaves = 4 ; % invariance maximale par transposition = 4 octaves
 nChromas = opts{1}.time.max_Q;
 transpinv_chromas = round(transpinv_octaves * nChromas);
-
 opts{2}.gamma.is_U_blurred = false;
 opts{2}.gamma.T = transpinv_chromas;
+opts{2}.gamma.gamma_bounds = [3 Inf];
 
- datapath='~/Documents/MATLAB/Stage/rwc/';
- 
- instrument_features = rwc_scatter( datapath,opts);
+datapath='~/datasets/rwc/';
 archs = sc_setup(opts);
+
+%%
+metas = rwc_parse(datapath);
+
+%% This for loop is handled on the server
+%nBatches = max([metas.batch_id]);
+%for batch_id = 1:nBatches
+%      batch = metas([metas.batch_id]==batch_id);
+%      rwc_scatter(archs, datapath, batch);
+%end
+
+%% Load features
+featurespath = '~/rwc_jointfeatures';
+samples = rwc_load(featurespath);
+
+%% Apply logarithmic transformation to the features
+samples = rwc_log(samples, 1e-6);
+
+%% Summarize features
+samples = rwc_summarize(samples);
+
+%% Transform data into a matrix
+feature_matrix = [samples.data];
+
+%% Standardize features to null mean and unit variance
+feature_matrix = bsxfun(@minus, feature_matrix, mean(feature_matrix,2));
+feature_matrix = bsxfun(@rdivide, feature_matrix, std(feature_matrix,[],2));
