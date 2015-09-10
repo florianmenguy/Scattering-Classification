@@ -5,7 +5,7 @@ batch_id = batch(1).batch_id;
 
 % Measure elapsed time with tic() and toc()
 tic();
-disp('Number of files in batch ', num2str(batch_id), ' : ', num2str(nFiles));
+disp(['Number of files in batch ', num2str(batch_id), ' : ', num2str(nFiles)]);
 parfor file_index = 1:nFiles
     meta = batch(file_index);
     % Chargement du signal
