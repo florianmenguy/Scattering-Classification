@@ -1,5 +1,6 @@
 % Ordre 1 en temps
 opts{1}.time.T = 2048;
+opts{1}.time.size = 4 * opts{1}.time.T;
 opts{1}.time.max_scale = 4096; % Environ 93 ms
 opts{1}.time.max_Q=8;
 
@@ -26,6 +27,6 @@ metas = parse_rwc(datapath);
 %%
 nBatches = max([metas.batch_id]);
 for batch_id = 1:nBatches
-      batch_metas = metas([metas.batch_id]==batch_id);
-      rwc_scatter(archs, datapath, batch_metas);
+      batch = metas([metas.batch_id]==batch_id);
+      rwc_scatter(archs, datapath, batch);
 end
