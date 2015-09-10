@@ -34,7 +34,14 @@ metas = rwc_parse(datapath);
 
 %% Load features
 featurespath = '~/rwc_jointfeatures';
-features = rwc_load(featurespath);
+samples = rwc_load(featurespath);
+
+%% Apply logarithmic transformation to the features
+samples = rwc_log(samples, 1e-6);
+
+%% Summarize features
+samples = rwc_summarization(samples);
 
 %%
-data = [features.data];
+
+tic();feature_matrix = [samples.data];toc();
