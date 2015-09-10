@@ -22,6 +22,9 @@ parfor file_index = 1:nFiles
     % Scattering
     S = sc_propagate(y,archs);
     batch(file_index).data = sc_format(S);
+    
+    disp(['Finished file ', num2str(file_index,'%1.2d'), 'on worker', ...
+        num2str(labindex,'%1.2d')]);
 end
 
 elapsed = toc();
