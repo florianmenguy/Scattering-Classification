@@ -24,9 +24,17 @@ archs = sc_setup(opts);
 
 %%
 metas = parse_rwc(datapath);
-%%
+
+%% This for loop is handled on the server
+
 nBatches = max([metas.batch_id]);
 for batch_id = 1:nBatches
       batch = metas([metas.batch_id]==batch_id);
       rwc_scatter(archs, datapath, batch);
 end
+
+%% Load features
+featurepath = '~/rwc_jointfeatures';
+features = load_features(featurespath);
+
+%%
