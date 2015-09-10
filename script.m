@@ -33,7 +33,7 @@ metas = rwc_parse(datapath);
 %end
 
 %% Load features
-featurepath = '~/rwc_jointfeatures';
+featurespath = '~/rwc_jointfeatures';
 features = rwc_load(featurespath);
 
 %%
