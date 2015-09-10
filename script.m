@@ -49,8 +49,14 @@ feature_matrix = [samples.data];
 feature_matrix = bsxfun(@minus, feature_matrix, mean(feature_matrix,2));
 feature_matrix = bsxfun(@rdivide, feature_matrix, std(feature_matrix,[],2));
 
-%% Set up partition
+%% Set up partition (x are features, y are labels)
 labels = [samples.instrument_id];
 nSamples = length(samples);
 test_ratio = 0.1;
+nFolds = 1;
+
 [train_bools, test_bools] = crossvalind('HoldOut', nSamples, test_ratio);
+train_x = feature_matrix(:, train_bools);
+train_y = labels(train_bools);
+test_x = feature_matrix(:, test_bools);
+test_y = labels(test_bools);
