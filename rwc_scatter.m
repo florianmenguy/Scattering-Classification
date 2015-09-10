@@ -1,65 +1,59 @@
-function instrument_features = rwc_scatter( opts,datapath )
+function instrument_features = rwc_scatter(archs, batch, datapath)
 % Fonction realisant l'extraction des coefficients de scattering au sein
 % d'un tableau de cellules (instrument_features). Les coefficients sont
 % "standardisés" (moyenne 0, variance 1) sur toute la base RWC.
 % instrument_features{i}{z} est une matrice temps-features contenant la
 % transformée de scattering du fichier z pour l'instrument i.
 
-% Creation de l'architecture
-archs = sc_setup(opts);
+nFiles = length(batch);
 
-% Liste des instruments
-instruments = ...
-    {'Ba' 'Bo'  'Cl' 'Co' 'Fh' 'Fl' 'Ob' 'Pn' 'Sa' 'Ta' 'Tb' 'Tr' 'Va' 'Vl'};
-nInstruments = length(instruments);
-instrument_features = cell(nInstruments,1);
-concatenated_features = cell(nInstruments,1);
-
-for i = 1:nInstruments
-    % On ne garde que les noms de fichiers se terminant par WAV
-    files = dir([datapath instruments{i} '/*WAV']);
-    nFiles = length(files);
-    instrument_features{i} = cell(nFiles,1);
+% Measure elapsed time with tic() and toc()
+tic();
+for file_index = 1:nFiles
+    meta = batch(file_index);
+    % Chargement du signal
+    filename = [datapath '/' meta.subfolder '/' meta.wavfile_name];
+    [y,fs] = audioread_compat(filename);
+    time = length(y)/fs;
+    if time > 3 % on coupe les sons plus longs que 3 s
+        y=y(1:3*fs);
+    end
     
-    for z = 1:nFiles
-        % Chargement du signal
-        filename = [datapath instruments{i} '/' files(z,1).name];
-        [y,fs] = audioread(filename);
-        time = length(y)/fs;
-        if time > 3 % on coupe les sons plus longs que 3 s
-            y=y(1:3*fs);
-        end
-        
-        % Normalisation du signal
-        ymean = y - mean(y);
-        maxabs = max(abs(ymean));
-        y = ymean/maxabs;
-        
-        % Scattering
-        S = sc_propagate(y,archs);
-        instrument_features{i}{z} = sc_format(S);
-    end
-    % On concatène ensemble tous les fichiers de chaque instrument
-    concatenated_features{i} = [instrument_features{i}{:}];
+    % Normalisation du signal
+    ymean = y - mean(y);
+    maxabs = max(abs(ymean));
+    y = ymean/maxabs;
+    
+    % Scattering
+    S = sc_propagate(y,archs);
+    batch(file_index).data = sc_format(S);
 end
 
-% On concatène tout
-full_matrix = [concatenated_features{:}];
+elapsed = toc();
+elapsed_str = num2str(elapsed,'%2.0f');
 
-% Calcul de la moyenne et de la variance globale de chaque feature
-full_mean = mean(full_matrix,2);
-full_variance = var(full_matrix,2);
+% Get host name
+pcinfo = java.net.InetAddress.getLocalHost();
+host = pcinfo.getHostName(); % class is java.lang.String
+host = char(host); % convert to MATLAB char array
 
-% Standardisation
-for i = 1:nInstruments
-    nFiles=length(instrument_features{i});
-    for z = 1:nFiles
-        instrument_features{i}{z} = ...
-            bsxfun(@minus,instrument_features{i}{z}, full_mean);
-        instrument_features{i}{z} = ...
-            bsxfun(@rdivide, instrument_features{i}{z}, full_variance);
-    end
+% Get date
+date = datestr(now());
+
+% Save
+savefile_name = [setting2prefix(setting), num2str(batch_id,'%1.2d')];
+if ~exist('features','dir')
+    mkdir('features');
 end
+savefile_path = ['features/', savefile_name];
+save(savefile_path, 'batch', 'setting', 'host', 'elapsed', 'date');
+
+% Print termination message
+disp('--------------------------------------------------------------------------------');
+disp(['Finished batch ', batch_id_str, ' on host ', host, ...
+    ' at ', date,' with settings:']);
+disp(setting);
+disp(['Elapsed time is ', elapsed_str ' seconds.']);
 end
 
 
