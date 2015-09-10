@@ -27,7 +27,7 @@ parfor file_index = 1:nFiles
     
     current_task = getCurrentTask();
     worker_id = current_task.ID;
-    disp(['Finished file ', num2str(file_index,'%1.2d'), ' on worker ', ...
+    disp(['Finished file ', num2str(file_index,'%1.3d'), ' on worker ', ...
         num2str(worker_id,'%1.2d')]);
 end
 
