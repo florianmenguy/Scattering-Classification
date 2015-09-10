@@ -4,7 +4,7 @@ nFiles = length(batch);
 
 % Measure elapsed time with tic() and toc()
 tic();
-for file_index = 1:nFiles
+parfor file_index = 1:nFiles
     meta = batch(file_index);
     % Chargement du signal
     filename = [datapath '/' meta.subfolder '/' meta.wavfile_name];
