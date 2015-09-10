@@ -1,9 +1,4 @@
-function instrument_features = rwc_scatter(archs, batch, datapath)
-% Fonction realisant l'extraction des coefficients de scattering au sein
-% d'un tableau de cellules (instrument_features). Les coefficients sont
-% "standardisés" (moyenne 0, variance 1) sur toute la base RWC.
-% instrument_features{i}{z} est une matrice temps-features contenant la
-% transformée de scattering du fichier z pour l'instrument i.
+function batch = rwc_scatter(archs, batch, datapath)
 
 nFiles = length(batch);
 
@@ -41,7 +36,7 @@ host = char(host); % convert to MATLAB char array
 date = datestr(now());
 
 % Save
-savefile_name = [setting2prefix(setting), num2str(batch_id,'%1.2d')];
+savefile_name = ['jointrwc_', num2str(batch_id,'%1.2d')];
 if ~exist('features','dir')
     mkdir('features');
 end
@@ -51,8 +46,7 @@ save(savefile_path, 'batch', 'setting', 'host', 'elapsed', 'date');
 % Print termination message
 disp('--------------------------------------------------------------------------------');
 disp(['Finished batch ', batch_id_str, ' on host ', host, ...
-    ' at ', date,' with settings:']);
-disp(setting);
+    ' at ', date]);
 disp(['Elapsed time is ', elapsed_str ' seconds.']);
 end
 
