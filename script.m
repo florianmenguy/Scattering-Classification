@@ -40,7 +40,7 @@ samples = rwc_load(featurespath);
 samples = rwc_log(samples, 1e-6);
 
 %% Summarize features
-samples = rwc_summarization(samples);
+samples = rwc_summarize(samples);
 
 %%
 
